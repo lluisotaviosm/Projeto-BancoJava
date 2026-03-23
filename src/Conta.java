@@ -5,14 +5,19 @@ public abstract class Conta {
     private String titular;
     private int numero;
     protected double saldo;
-    private List<String> historico; // BÔNUS: Histórico de operações
+    private List<String> historico;// BÔNUS: Histórico de operações
+    private double limiteSaque;
+    private boolean bloqueada;
 
-    public Conta(String titular, int numero) {
+
+    public Conta(String titular, int numero, double limite) {
         this.titular = titular;
         this.numero = numero;
+        this.limiteSaque = limite;
         this.saldo = 0.0;
+        this.bloqueada = false;
         this.historico = new ArrayList<>();
-        this.historico.add("Conta aberta com saldo inicial de R$ 0.00");
+        this.historico.add("Conta criada com sucesso!!! seu limite é de R$ "+ limite);
     }
 
     public void depositar(double valor) {
@@ -23,8 +28,9 @@ public abstract class Conta {
     }
 
     public boolean sacar(double valor) {
-        // BÔNUS: Validação de saldo insuficiente
-        if (valor > 0 && this.saldo >= valor) {
+        if (bloqueada) return false;
+
+        if (valor > 0 && valor <= limiteSaque && this.saldo >= valor){
             this.saldo -= valor;
             this.historico.add("Saque: - R$ " + String.format("%.2f", valor));
             return true;
@@ -44,7 +50,7 @@ public abstract class Conta {
     public String getTitular() { return titular; }
     public int getNumero() { return numero; }
     public double getSaldo() { return saldo; }
-
+    public List<String> getHistorico() {return historico;}
     @Override
     public String toString() {
         return "Conta: " + numero + " | Titular: " + titular + " | Saldo: R$ " + String.format("%.2f", saldo);
