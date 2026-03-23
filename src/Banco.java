@@ -1,25 +1,14 @@
 import java.util.ArrayList;
 
 public class Banco {
-    // Requisito: Lista de objetos Conta
-    private ArrayList<Conta> listaContas = new ArrayList<>();
+    private ArrayList<Conta> contas = new ArrayList<>();
 
     public void adicionarConta(Conta c) {
-        listaContas.add(c);
-    }
-
-    public boolean removerConta(int numero) {
-        // BÔNUS: Exclusão de conta
-        Conta c = buscarConta(numero);
-        if (c != null) {
-            listaContas.remove(c);
-            return true;
-        }
-        return false;
+        contas.add(c);
     }
 
     public Conta buscarConta(int numero) {
-        for (Conta c : listaContas) {
+        for (Conta c : contas) {
             if (c.getNumero() == numero) {
                 return c;
             }
@@ -27,7 +16,7 @@ public class Banco {
         return null;
     }
 
-    public ArrayList<Conta> listarContas() {
-        return listaContas;
+    public ArrayList<Conta> getTodas() {
+        return contas;
     }
 }
