@@ -1,14 +1,10 @@
-public class ContaCorrente extends Conta {
-    private double taxaManutencao = 2.00; // Taxa por saque
-
+public class ContaCorrente extends Conta implements Tributavel {
     public ContaCorrente(String titular, int numero) {
-        super(titular, numero);
+        super(titular, numero, 1000.0);
     }
 
     @Override
-    public boolean sacar(double valor) {
-        double valorComTaxa = valor + taxaManutencao;
-        // Polimorfismo: utiliza a lógica de saque da classe mãe com o valor acrescido da taxa
-        return super.sacar(valorComTaxa);
+    public double calcularTributo() {
+        return this.saldo * 0.1;
     }
 }
