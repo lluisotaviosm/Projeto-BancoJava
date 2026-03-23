@@ -12,6 +12,15 @@ Projeto desenvolvido para a disciplina de Programação, focado nos pilares de O
 
 ---
 
+## ARQUITETURA
+- **Abstração:** A classe `Conta` é abstrata pois serve apenas como molde, evitando a criação de contas sem um tipo definido.
+- **Interfaces:** `Tributavel` e `Autenticavel` definem comportamentos que podem ser compartilhados por classes de hierarquias diferentes.
+- **Polimorfismo:** A calculadora de impostos aceita qualquer objeto `Tributavel`, permitindo que o sistema cresça sem precisar mudar a lógica da calculadora.
+
+---
+
+## EXECUÇÃO
+
 ## COMO EXECUTAR
 1. Instale o JDK (Java Development Kit) 17 ou superior.
 2. Coloque todos os arquivos `.java` em uma pasta.
