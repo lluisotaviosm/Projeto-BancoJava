@@ -3,135 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banco Java Full Stack</title>
-    <!-- Fonte moderna do Google Fonts -->
+    <title>Banco Java - Sistema Bancário</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header class="topbar">
-        <h1>BANCO JAVA</h1>
+        <h1>🏦 BANCO JAVA</h1>
+        <p class="topbar-sub">Sistema Bancário Full Stack</p>
     </header>
 
     <div class="container">
-        <!-- Tela Inicial: Criar Conta & Login do Gerente -->
-        <div id="welcome-screen" class="welcome-grid">
-            
-            <div class="card create-account-card">
-                <h2>Crie sua Conta Imediatamente</h2>
-                <p>Abra sua conta agora enviando seus dados.</p>
-                <div class="form-group">
-                    <label>Titular da Conta</label>
-                    <input type="text" id="titular" placeholder="Ex: Usuario">
+
+        <!-- ============================================ -->
+        <!-- TELA INICIAL: escolha de perfil             -->
+        <!-- ============================================ -->
+        <div id="tela-inicial" class="welcome-grid">
+
+            <!-- LADO ESQUERDO: Área do Cliente -->
+            <div class="card">
+                <h2>👤 Área do Cliente</h2>
+                <p>Abra sua conta ou acesse uma conta já existente para realizar operações.</p>
+
+                <div class="tab-bar">
+                    <button class="tab-btn active" id="tab-criar" onclick="mostrarTab('criar')">Abrir Conta</button>
+                    <button class="tab-btn" id="tab-acessar" onclick="mostrarTab('acessar')">Já tenho conta</button>
                 </div>
-                <div class="form-group">
-                    <label>Número da Conta</label>
-                    <input type="number" id="numero-nova" placeholder="Ex: 1234">
+
+                <!-- Sub-aba: Criar conta -->
+                <div id="aba-criar">
+                    <div class="form-group">
+                        <label>Nome do Titular</label>
+                        <input type="text" id="titular" placeholder="Ex: João da Silva">
+                    </div>
+                    <div class="form-group">
+                        <label>Número da Conta</label>
+                        <input type="number" id="numero-nova" placeholder="Ex: 1313">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Conta</label>
+                        <select id="tipo-conta">
+                            <option value="CORRENTE">Conta Corrente</option>
+                            <option value="POUPANCA">Conta Poupança</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary wide" onclick="criarConta()">Abrir Conta</button>
+                    <p id="msg-criar" class="msg"></p>
                 </div>
-                <div class="form-group">
-                    <label>Tipo de Conta</label>
-                    <select id="tipo-conta">
-                        <option value="CORRENTE">Corrente</option>
-                        <option value="POUPANCA">Poupança</option>
-                    </select>
+
+                <!-- Sub-aba: Acessar conta existente -->
+                <div id="aba-acessar" style="display:none;">
+                    <div class="form-group">
+                        <label>Número da Conta</label>
+                        <input type="number" id="numero-acesso" placeholder="Digite o número da conta">
+                    </div>
+                    <button class="btn btn-secondary wide" onclick="acessarConta()">Entrar na Minha Conta</button>
+                    <p id="msg-acesso" class="msg"></p>
                 </div>
-                <button class="primary-btn" onclick="criarConta()">Abrir Conta</button>
-                <p id="msg-criar" class="msg"></p>
             </div>
 
-            <div class="card login-card">
-                <h2>Acesso do Gerente</h2>
-                <p>Área restrita para gerenciamento do banco.</p>
+            <!-- LADO DIREITO: Área do Gerente -->
+            <div class="card">
+                <h2>🔒 Área do Gerente</h2>
+                <p>Login restrito para administração e visualização de todas as contas do banco.</p>
                 <div class="form-group">
                     <label>Usuário</label>
-                    <input type="text" id="username" placeholder="Gerente">
+                    <input type="text" id="username" placeholder="admin">
                 </div>
                 <div class="form-group">
                     <label>Senha</label>
-                    <input type="password" id="password" placeholder="******">
+                    <input type="password" id="password" placeholder="••••••">
                 </div>
-                <button class="secondary-btn" onclick="login()">Entrar como Gerente</button>
+                <button class="btn btn-dark wide" onclick="loginGerente()">Acessar Painel</button>
                 <p id="login-msg" class="msg"></p>
             </div>
 
         </div>
 
-        <!-- Dashboard do Gerente (Oculto inicialmente) -->
-        <div id="dashboard-container" style="display: none;">
-            <div class="dashboard-header">
-                <h2>Painel do Gerente</h2>
-                <button class="danger-btn" onclick="logout()">Sair</button>
+        <!-- ============================================ -->
+        <!-- PAINEL DO CLIENTE (aparece após criar/acessar) -->
+        <!-- ============================================ -->
+        <div id="painel-cliente" style="display:none;">
+            <div class="painel-header">
+                <div>
+                    <h2>Olá, <span id="nome-cliente"></span>!</h2>
+                    <p style="color:#6b7280;">Conta nº <strong id="numero-cliente"></strong></p>
+                </div>
+                <span class="saldo-badge">Saldo: R$ <span id="saldo-cliente">0,00</span></span>
+                <button class="btn btn-outline" onclick="voltarInicio()">Sair</button>
+            </div>
+
+            <div class="ops-grid">
+                <!-- Depositar -->
+                <div class="card op-card">
+                    <h3>💰 Depositar</h3>
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input type="number" id="valor-dep" placeholder="R$ 0,00">
+                    </div>
+                    <button class="btn btn-success wide" onclick="depositar()">Confirmar Depósito</button>
+                    <p id="msg-dep" class="msg"></p>
+                </div>
+
+                <!-- Sacar -->
+                <div class="card op-card">
+                    <h3>💸 Sacar</h3>
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input type="number" id="valor-saque" placeholder="R$ 0,00">
+                    </div>
+                    <button class="btn btn-warning wide" onclick="sacar()">Confirmar Saque</button>
+                    <p id="msg-saque" class="msg"></p>
+                </div>
+
+                <!-- Transferir -->
+                <div class="card op-card">
+                    <h3>🔄 Transferir</h3>
+                    <div class="form-group">
+                        <label>Conta Destino</label>
+                        <input type="number" id="destino-transf" placeholder="Nº da conta destino">
+                    </div>
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input type="number" id="valor-transf" placeholder="R$ 0,00">
+                    </div>
+                    <button class="btn btn-primary wide" onclick="transferir()">Transferir</button>
+                    <p id="msg-transf" class="msg"></p>
+                </div>
+
+                <!-- Tributos -->
+                <div class="card op-card">
+                    <h3>📊 Calcular Tributo</h3>
+                    <p style="color:#6b7280; font-size:0.9rem;">Exibe o imposto calculado sobre o saldo da conta corrente (10%).</p>
+                    <button class="btn btn-outline wide" onclick="calcularTributo()">Calcular</button>
+                    <p id="msg-tributo" class="msg"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PAINEL DO GERENTE                           -->
+        <!-- ============================================ -->
+        <div id="painel-gerente" style="display:none;">
+            <div class="painel-header">
+                <h2>🏦 Painel do Gerente</h2>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-outline" onclick="listarContas()">Atualizar</button>
+                    <button class="btn btn-danger" onclick="voltarInicio()">Sair</button>
+                </div>
             </div>
 
             <div class="dashboard-grid">
-                <!-- Coluna 1: Operações -->
-                <div class="operations-col">
+                <!-- Coluna 1: Ferramentas -->
+                <div>
                     <div class="card">
-                        <h3>Transações Básicas</h3>
-                        <div class="form-group row">
-                            <input type="number" id="numero-op" placeholder="Nº da Conta">
-                            <input type="number" id="valor-op" placeholder="Valor (R$)">
-                        </div>
-                        <div class="btn-group">
-                            <button class="success-btn" onclick="depositar()">Depositar</button>
-                            <button class="warning-btn" onclick="sacar()">Sacar</button>
-                        </div>
-                        <p id="msg-op" class="msg"></p>
-                    </div>
+                        <h3>⚙️ Ferramentas do Gerente</h3>
 
-                    <div class="card">
-                        <h3>Transferência</h3>
+                        <p style="font-size:0.85rem; font-weight:600; margin-bottom:5px;">Bloquear / Desbloquear Conta</p>
                         <div class="form-group row">
-                            <input type="number" id="origem-transf" placeholder="Nº Origem">
-                            <input type="number" id="destino-transf" placeholder="Nº Destino">
-                            <input type="number" id="valor-transf" placeholder="Valor (R$)">
-                        </div>
-                        <button class="primary-btn full-width" onclick="transferir()">Transferir Valor</button>
-                        <p id="msg-transf" class="msg"></p>
-                    </div>
-
-                    <div class="card border-alert">
-                        <h3>Ferramentas Anti-IA (Autoria)</h3>
-                        <div class="form-group row">
-                            <input type="number" id="numero-bloqueio" placeholder="Nº Conta">
+                            <input type="number" id="numero-bloqueio" placeholder="Nº da Conta">
                             <select id="status-bloqueio">
-                                <option value="true">Bloquear Conta</option>
-                                <option value="false">Desbloquear Conta</option>
+                                <option value="true">Bloquear</option>
+                                <option value="false">Desbloquear</option>
                             </select>
-                            <button class="danger-btn" onclick="alterarBloqueio()">Aplicar</button>
                         </div>
+                        <button class="btn btn-danger wide" onclick="alterarBloqueio()">Aplicar Bloqueio</button>
                         <p id="msg-bloqueio" class="msg"></p>
-                        
-                        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
-                        
-                        <button class="secondary-btn full-width" onclick="topSaldos()">Filtrar Top 5 Saldos</button>
+
+                        <hr class="divider">
+
+                        <p style="font-size:0.85rem; font-weight:600; margin-bottom:8px;">Ranking — Top 5 Saldos</p>
+                        <button class="btn btn-secondary wide" onclick="topSaldos()">Ver Top Saldos</button>
                     </div>
                 </div>
 
-                <!-- Coluna 2: Listagem de Contas -->
-                <div class="list-col">
-                    <div class="card">
-                        <div class="flex-between">
-                            <h3>Contas Cadastradas</h3>
-                            <button class="primary-btn small-btn" onclick="listarContas()">Atualizar Lista</button>
-                        </div>
-                        <ul id="lista-contas" class="account-list"></ul>
-                    </div>
+                <!-- Coluna 2: Lista de Contas -->
+                <div class="card">
+                    <h3>📋 Todas as Contas Cadastradas</h3>
+                    <ul id="lista-contas" class="account-list">
+                        <li style="color:#9ca3af; padding:10px;">Clique em "Atualizar" para carregar as contas.</li>
+                    </ul>
                 </div>
             </div>
-            
         </div>
+
     </div>
 
     <!-- Modal de Erro Backend -->
     <div id="backend-error" class="modal" style="display: none;">
         <div class="modal-content">
-            <h3>⛔ Erro de Conexão</h3>
-            <p>Ocorreu um erro <b>"Failed to fetch"</b>.</p>
-            <p>Isso significa que a Interface Web não conseguiu se conectar com a API.</p>
-            <p><b>Solução:</b> Vá na pasta <code>backend</code> pelo terminal do seu computador e execute o Spring Boot (<code>mvn spring-boot:run</code>) antes de testar o site.</p>
-            <button class="primary-btn" onclick="fecharModalErro()">Entendi</button>
+            <h3>⛔ Backend Desligado</h3>
+            <p>O site não conseguiu conectar com a API.</p>
+            <p><b>Solução:</b> Abra o arquivo <code>ApiApplication.java</code> no IntelliJ e clique no botão <b>▶ Play</b> para ligar o servidor na porta 8080.</p>
+            <button class="btn btn-primary" onclick="fecharModalErro()">Entendi</button>
         </div>
     </div>
 
