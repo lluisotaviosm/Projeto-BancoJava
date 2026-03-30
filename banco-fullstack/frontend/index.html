@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Java Full Stack</title>
+    <!-- Fonte moderna do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <h1>BANCO JAVA</h1>
+    </header>
+
+    <div class="container">
+        <!-- Tela Inicial: Criar Conta & Login do Gerente -->
+        <div id="welcome-screen" class="welcome-grid">
+            
+            <div class="card create-account-card">
+                <h2>Crie sua Conta Imediatamente</h2>
+                <p>Abra sua conta agora enviando seus dados.</p>
+                <div class="form-group">
+                    <label>Titular da Conta</label>
+                    <input type="text" id="titular" placeholder="Ex: Usuario">
+                </div>
+                <div class="form-group">
+                    <label>Número da Conta</label>
+                    <input type="number" id="numero-nova" placeholder="Ex: 1234">
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Conta</label>
+                    <select id="tipo-conta">
+                        <option value="CORRENTE">Corrente</option>
+                        <option value="POUPANCA">Poupança</option>
+                    </select>
+                </div>
+                <button class="primary-btn" onclick="criarConta()">Abrir Conta</button>
+                <p id="msg-criar" class="msg"></p>
+            </div>
+
+            <div class="card login-card">
+                <h2>Acesso do Gerente</h2>
+                <p>Área restrita para gerenciamento do banco.</p>
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" id="username" placeholder="Gerente">
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="password" placeholder="******">
+                </div>
+                <button class="secondary-btn" onclick="login()">Entrar como Gerente</button>
+                <p id="login-msg" class="msg"></p>
+            </div>
+
+        </div>
+
+        <!-- Dashboard do Gerente (Oculto inicialmente) -->
+        <div id="dashboard-container" style="display: none;">
+            <div class="dashboard-header">
+                <h2>Painel do Gerente</h2>
+                <button class="danger-btn" onclick="logout()">Sair</button>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Coluna 1: Operações -->
+                <div class="operations-col">
+                    <div class="card">
+                        <h3>Transações Básicas</h3>
+                        <div class="form-group row">
+                            <input type="number" id="numero-op" placeholder="Nº da Conta">
+                            <input type="number" id="valor-op" placeholder="Valor (R$)">
+                        </div>
+                        <div class="btn-group">
+                            <button class="success-btn" onclick="depositar()">Depositar</button>
+                            <button class="warning-btn" onclick="sacar()">Sacar</button>
+                        </div>
+                        <p id="msg-op" class="msg"></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Transferência</h3>
+                        <div class="form-group row">
+                            <input type="number" id="origem-transf" placeholder="Nº Origem">
+                            <input type="number" id="destino-transf" placeholder="Nº Destino">
+                            <input type="number" id="valor-transf" placeholder="Valor (R$)">
+                        </div>
+                        <button class="primary-btn full-width" onclick="transferir()">Transferir Valor</button>
+                        <p id="msg-transf" class="msg"></p>
+                    </div>
+
+                    <div class="card border-alert">
+                        <h3>Ferramentas Anti-IA (Autoria)</h3>
+                        <div class="form-group row">
+                            <input type="number" id="numero-bloqueio" placeholder="Nº Conta">
+                            <select id="status-bloqueio">
+                                <option value="true">Bloquear Conta</option>
+                                <option value="false">Desbloquear Conta</option>
+                            </select>
+                            <button class="danger-btn" onclick="alterarBloqueio()">Aplicar</button>
+                        </div>
+                        <p id="msg-bloqueio" class="msg"></p>
+                        
+                        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+                        
+                        <button class="secondary-btn full-width" onclick="topSaldos()">Filtrar Top 5 Saldos</button>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Listagem de Contas -->
+                <div class="list-col">
+                    <div class="card">
+                        <div class="flex-between">
+                            <h3>Contas Cadastradas</h3>
+                            <button class="primary-btn small-btn" onclick="listarContas()">Atualizar Lista</button>
+                        </div>
+                        <ul id="lista-contas" class="account-list"></ul>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Modal de Erro Backend -->
+    <div id="backend-error" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>⛔ Erro de Conexão</h3>
+            <p>Ocorreu um erro <b>"Failed to fetch"</b>.</p>
+            <p>Isso significa que a Interface Web não conseguiu se conectar com a API.</p>
+            <p><b>Solução:</b> Vá na pasta <code>backend</code> pelo terminal do seu computador e execute o Spring Boot (<code>mvn spring-boot:run</code>) antes de testar o site.</p>
+            <button class="primary-btn" onclick="fecharModalErro()">Entendi</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
