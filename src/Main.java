@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Main {
     private static Banco banco = new Banco();
     private static Scanner ler = new Scanner(System.in);
-    private static Gerente gerenteChefe = new Gerente("Admin", "1313");
+    private static Gerente gerenteChefe = new Gerente("Admin", "1234");
 
     public static void main(String[] args) {
         int opcao = -1;
